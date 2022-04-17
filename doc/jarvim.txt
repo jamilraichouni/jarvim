@@ -1,0 +1,17 @@
+*jarvim.txt*  Jamil André RAICHOUNIs neovim plugin
+
+        JarVim HELP
+
+========================================================================================
+To tag: `:helpt $JARVIMDIR/doc`
+
+Great it is. Hehe
+
+*mytag*
+*tagjar*
+
+Cool it is!! Now let us jump to |mytag|.
+
+and also to |newtag|.
+
+vim:textwidth=88:tabstop=4:filetype=help:norl:syntax=help:
