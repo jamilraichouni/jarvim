@@ -32,6 +32,10 @@ class JarVim(object):
         #     "n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>",
         #     {"noremap": True, "silent": True}
         # )
+    @pynvim.autocmd("DirChanged", pattern="*", eval="", sync=False)
+    def on_dir_changed(self):
+        self.nvim.out_write("DirChanged, yeah!\n")
+
     @pynvim.autocmd("VimEnter", pattern="*", eval="", sync=False)
     def on_vimenter(self):
         MODULE_DIR: Path = Path(__file__).parents[0]
