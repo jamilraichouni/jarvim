@@ -35,7 +35,8 @@ class JarVim(object):
         # )
     @pynvim.autocmd("DirChanged", pattern="*", eval="", sync=False)
     def on_dir_changed(self):
-        self.nvim.out_write(f"DirChanged, yeah! eval: {os.getcwd()}\n")
+        cwd = self.nvim.call("getcwd")
+        self.nvim.out_write(f"DirChanged to {cwd}\n")
 
     @pynvim.autocmd("VimEnter", pattern="*", eval="", sync=False)
     def on_vimenter(self):
