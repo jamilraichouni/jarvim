@@ -1,4 +1,3 @@
-import os
 import sys
 from pathlib import Path
 
@@ -15,19 +14,19 @@ class JarVim(object):
     # def jarfunction(self, args):
     #     return 3
 
-    @pynvim.command("JarCommand", nargs="*", range="")
-    def jarcommand(self, args, range):
-        # self.nvim.current.line = f"Command with args: {args}, range: {range}"
-        MODULE_DIR: Path = Path(__file__).parents[0]
-        self.nvim.out_write(f"MODULE_DIR: {MODULE_DIR}\n")
-        sys.path.insert(0, str(MODULE_DIR / "jarvim"))
-        from jarlsp import JarLsp
+    @pynvim.command("JARNewProject", nargs="*", range="")
+    def jar_new_project(self, args, range):
+        self.nvim.out_write(f"args: {args}\n")
+        # MODULE_DIR: Path = Path(__file__).parents[0]
+        # self.nvim.out_write(f"MODULE_DIR: {MODULE_DIR}\n")
+        # sys.path.insert(0, str(MODULE_DIR / "jarvim"))
+        # from jarlsp import JarLsp
 
     # @pynvim.autocmd("BufEnter", pattern="*.py", eval="expand('<afile>')", sync=False)
     # def on_bufenter(self, filename):
     #     pass
     #     self._setup_pylsp()
-    
+
         # self.nvim.request(
         #     "nvim_set_keymap",
         #     "n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>",
