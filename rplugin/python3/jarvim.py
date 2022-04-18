@@ -52,6 +52,7 @@ class JarVim(object):
         [logger.info(p) for p in sorted(sys.path)]
         self.jarlsp = JarLsp(self.nvim)
 
+    @pynvim.command("JARReloadDebugConfiguration")
     def reload_debug_configuration(self):
         cwd: Path = Path(self.nvim.call("getcwd"))
         debug_cfg_file_path: Path = cwd / ".jarvim/debug.json"
@@ -60,3 +61,5 @@ class JarVim(object):
         self.nvim.out_write(
             f"Reload debug configuration from '{debug_cfg_file_path}'..."
         )
+        self.nvim.exec_lua("dap_ext_vscode = require('dap.ext.vscode')")
+        self.nvim.lua.dap_ext_vscode.load_launchjs(str(debug_cfg_file_path))
