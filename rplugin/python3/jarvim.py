@@ -1,3 +1,4 @@
+import json
 import sys
 from pathlib import Path
 
@@ -15,7 +16,7 @@ class JarVim(object):
     #     return 3
 
     @pynvim.command("JARNewProject", nargs="*", range="")
-    def jar_new_project(self, args, range):
+    def new_project(self, args, range):
         self.nvim.out_write(f"args: {args}\n")
         # MODULE_DIR: Path = Path(__file__).parents[0]
         # self.nvim.out_write(f"MODULE_DIR: {MODULE_DIR}\n")
@@ -36,6 +37,7 @@ class JarVim(object):
     def on_dir_changed(self):
         cwd = self.nvim.call("getcwd")
         self.nvim.out_write(f"DirChanged to {cwd}\n")
+        self.reload_debug_configuration()
 
     @pynvim.autocmd("VimEnter", pattern="*", eval="", sync=False)
     def on_vimenter(self):
@@ -49,3 +51,12 @@ class JarVim(object):
         logger.info("JarVim plugin has been activated.")
         [logger.info(p) for p in sorted(sys.path)]
         self.jarlsp = JarLsp(self.nvim)
+
+    def reload_debug_configuration(self):
+        cwd: Path = Path(self.nvim.call("getcwd"))
+        debug_cfg_file_path: Path = cwd / ".jarvim/debug.json"
+        if not debug_cfg_file_path.exists:
+            return
+        self.nvim.out_write(
+            f"Reload debug configuration from '{debug_cfg_file_path}'..."
+        )
