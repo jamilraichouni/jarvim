@@ -37,7 +37,7 @@ class JarVim(object):
     def on_dir_changed(self):
         cwd = self.nvim.call("getcwd")
         self.nvim.out_write(f"DirChanged to {cwd}\n")
-        self.reload_debug_configuration()
+        # self.reload_debug_configuration()
 
     @pynvim.autocmd("VimEnter", pattern="*", eval="", sync=False)
     def on_vimenter(self):
@@ -61,5 +61,6 @@ class JarVim(object):
         self.nvim.out_write(
             f"Reload debug configuration from '{debug_cfg_file_path}'..."
         )
+        self.nvim.exec_lua("require('dap').configurations.python = {}")
         self.nvim.exec_lua("dap_ext_vscode = require('dap.ext.vscode')")
         self.nvim.lua.dap_ext_vscode.load_launchjs(str(debug_cfg_file_path))
