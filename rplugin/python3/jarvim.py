@@ -55,7 +55,7 @@ class JarVim(object):
     def reload_debug_configuration(self):
         cwd: Path = Path(self.nvim.call("getcwd"))
         debug_cfg_file_path: Path = cwd / ".jarvim/debug.json"
-        if not debug_cfg_file_path.exists:
+        if not debug_cfg_file_path.is_file():
             return
         self.nvim.out_write(
             f"Reload debug configuration from '{debug_cfg_file_path}'..."
