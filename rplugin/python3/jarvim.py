@@ -1,4 +1,4 @@
-import json
+"""Neovim plugin JarVim."""
 import sys
 from pathlib import Path
 
@@ -7,6 +7,7 @@ import pynvim
 
 @pynvim.plugin
 class JarVim(object):
+    """Plugin class."""
 
     def __init__(self, nvim):
         self.nvim = nvim
@@ -28,16 +29,15 @@ class JarVim(object):
     #     pass
     #     self._setup_pylsp()
 
-        # self.nvim.request(
-        #     "nvim_set_keymap",
-        #     "n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>",
-        #     {"noremap": True, "silent": True}
-        # )
+    # self.nvim.request(
+    #     "nvim_set_keymap",
+    #     "n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>",
+    #     {"noremap": True, "silent": True}
+    # )
     @pynvim.autocmd("DirChanged", pattern="*", eval="", sync=False)
     def on_dir_changed(self):
         cwd = self.nvim.call("getcwd")
-        self.nvim.out_write(f"DirChanged to {cwd}\n")
-        # self.reload_debug_configuration()
+        self.reload_debug_configuration()
 
     @pynvim.autocmd("VimEnter", pattern="*", eval="", sync=False)
     def on_vimenter(self):
@@ -47,6 +47,7 @@ class JarVim(object):
 
         from jarlsp import JarLsp
         from log import logger
+
         logger.add(Path(self.nvim.funcs.stdpath("data")) / "jarvim.log", level="DEBUG")
         logger.info("JarVim plugin has been activated.")
         [logger.info(p) for p in sorted(sys.path)]
@@ -58,9 +59,9 @@ class JarVim(object):
         debug_cfg_file_path: Path = cwd / ".jarvim/debug.json"
         if not debug_cfg_file_path.is_file():
             return
-        self.nvim.out_write(
-            f"Reload debug configuration from '{debug_cfg_file_path}'..."
-        )
+        # self.nvim.out_write(
+        #     f"Reload debug configuration from '{debug_cfg_file_path}'..."
+        # )
         self.nvim.exec_lua("require('dap').configurations.python = {}")
         self.nvim.exec_lua("dap_ext_vscode = require('dap.ext.vscode')")
         self.nvim.lua.dap_ext_vscode.load_launchjs(str(debug_cfg_file_path))
