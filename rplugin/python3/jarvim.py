@@ -42,7 +42,6 @@ class JarVim(object):
     @pynvim.autocmd("VimEnter", pattern="*", eval="", sync=False)
     def on_vimenter(self):
         MODULE_DIR: Path = Path(__file__).parents[0]
-        self.nvim.out_write(f"MODULE_DIR: {MODULE_DIR}\n")
         sys.path.insert(0, str(MODULE_DIR / "jarvim"))
 
         from jarlsp import JarLsp
