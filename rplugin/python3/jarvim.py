@@ -16,6 +16,10 @@ class JarVim(object):
     # def jarfunction(self, args):
     #     return 3
 
+    @pynvim.command("JARTest", nargs="*", range="")
+    def test_command(self, args, range):
+        self.nvim.out_write(f"Test args: {args}\n")
+
     @pynvim.command("JARNewProject", nargs="*", range="")
     def new_project(self, args, range):
         self.nvim.out_write(f"args: {args}\n")
@@ -35,22 +39,28 @@ class JarVim(object):
     #     {"noremap": True, "silent": True}
     # )
     @pynvim.autocmd("DirChanged", pattern="*", eval="", sync=False)
-    def on_dir_changed(self):
+    def _on_dir_changed(self):
         cwd = self.nvim.call("getcwd")
-        self.reload_debug_configuration()
+        msg = f"DirChanged to {cwd}"
+        # self.nvim.out_write(msg)
+        self.logger.info(msg)
+        # self.reload_debug_configuration()
 
     @pynvim.autocmd("VimEnter", pattern="*", eval="", sync=False)
     def on_vimenter(self):
         MODULE_DIR: Path = Path(__file__).parents[0]
         sys.path.insert(0, str(MODULE_DIR / "jarvim"))
 
-        from jarlsp import JarLsp
+        # from jarlsp import JarLsp
         from log import logger
 
-        logger.add(Path(self.nvim.funcs.stdpath("data")) / "jarvim.log", level="DEBUG")
-        logger.info("JarVim plugin has been activated.")
-        [logger.info(p) for p in sorted(sys.path)]
-        self.jarlsp = JarLsp(self.nvim)
+        self.logger = logger
+
+        self.logger.add(
+            Path(self.nvim.funcs.stdpath("data")) / "jarvim.log", level="DEBUG"
+        )
+        self.logger.info("JarVim plugin has been activated.")
+        # self.jarlsp = JarLsp(self.nvim)
 
     @pynvim.command("JARReloadDebugConfiguration")
     def reload_debug_configuration(self):
